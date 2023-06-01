@@ -43,7 +43,7 @@ define udev::rule(
   $content = undef,
   $source  = undef
 ) {
-  validate_re($ensure, '^present$|^absent$')
+  validate_legacy(String, 'validate_re', $ensure, ['^present$|^absent$'])
 
   include udev
 
@@ -57,14 +57,14 @@ define udev::rule(
     notify => Class['udev::udevadm::trigger'],
   }
   if $source {
-    validate_string($source)
+    validate_legacy(String, 'validate_string', $source)
 
     if $content {
       fail("${title}: parameters \$source and \$content are mutually exclusive")
     }
     $config_content = { source => $source }
   } elsif $content {
-    validate_string($content)
+    validate_legacy(String, 'validate_string', $content)
 
     if $source {
       fail("${title}: parameters \$source and \$content are mutually exclusive")
